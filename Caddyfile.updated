@@ -1,0 +1,103 @@
+aifact3.com {
+    handle /nt2begeleiding/api/* {
+        uri strip_prefix /nt2begeleiding
+        reverse_proxy 172.17.0.1:8000
+    }
+
+    handle_path /nt2begeleiding/* {
+        root * /var/www/nt2begeleiding/public
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle /CabinetDesigner/api/* {
+        uri strip_prefix /CabinetDesigner
+        reverse_proxy host.docker.internal:3003
+    }
+
+    handle_path /CabinetDesigner/* {
+        root * /var/www/html/CabinetDesigner
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle_path /CConline/* {
+        root * /var/www/html/CConline
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle_path /uploads/* {
+        root * /srv/uploads
+        file_server
+    }
+
+    # Woodworking App - redirect uppercase to lowercase
+    @woodworkingUpper path_regexp upper ^/Woodworking-app(.*)$
+    redir @woodworkingUpper /woodworking-app{re.upper.1} permanent
+
+    handle /woodworking-app/api/* {
+        uri strip_prefix /woodworking-app
+        reverse_proxy woodworking-backend:3001
+    }
+
+    handle /woodworking-app/* {
+        reverse_proxy woodworking-frontend:80
+    }
+
+    handle {
+        reverse_proxy web:3000
+    }
+}
+
+http://5.255.118.147 {
+    handle /nt2begeleiding/api/* {
+        uri strip_prefix /nt2begeleiding
+        reverse_proxy 172.17.0.1:8000
+    }
+
+    handle_path /nt2begeleiding/* {
+        root * /var/www/nt2begeleiding/public
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle /CabinetDesigner/api/* {
+        uri strip_prefix /CabinetDesigner
+        reverse_proxy localhost:3003
+    }
+
+    handle_path /CabinetDesigner/* {
+        root * /var/www/html/CabinetDesigner
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle_path /CConline/* {
+        root * /var/www/html/CConline
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle_path /uploads/* {
+        root * /srv/uploads
+        file_server
+    }
+
+    # Woodworking App - redirect uppercase to lowercase
+    @woodworkingUpperHttp path_regexp upperHttp ^/Woodworking-app(.*)$
+    redir @woodworkingUpperHttp /woodworking-app{re.upperHttp.1} permanent
+
+    handle /woodworking-app/api/* {
+        uri strip_prefix /woodworking-app
+        reverse_proxy woodworking-backend:3001
+    }
+
+    handle /woodworking-app/* {
+        reverse_proxy woodworking-frontend:80
+    }
+
+    handle {
+        reverse_proxy web:3000
+    }
+}

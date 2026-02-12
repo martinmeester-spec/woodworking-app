@@ -1,0 +1,10 @@
+# Add this to your existing Caddyfile for aifact3.com
+# This handles the /woodworking-app path
+
+handle_path /woodworking-app/* {
+    reverse_proxy woodworking-frontend:80
+}
+
+handle_path /woodworking-app/api/* {
+    reverse_proxy woodworking-backend:3001
+}
